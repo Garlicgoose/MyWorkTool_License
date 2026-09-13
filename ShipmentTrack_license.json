@@ -1,5 +1,14 @@
 {
-  "8e4f165a-8457-44c9-897d-3474081bc494": true,
-  "216a8143-b0dd-4b4b-a3d7-49f293ef88e1": true,
-  "5fd98c8c-6b63-4c05-b752-1514231c6d1e": true
+  "payload": {
+    "schema": 1,
+    "revision": 1,
+    "issued_at": "2026-09-13T13:27:52.617481+00:00",
+    "global_enabled": true,
+    "machines": {
+      "200cd2317fc28ea4c5f491b394daccbcd9645285b4b71030b1c3569cb07a11fb": true,
+      "329392bbc9c3abed3df5859c93ec767f88fbacf2569027579cbd8b56ec626f8c": true,
+      "516a4336574e5fea7ed01462a51237ef3863c65aedd31ec6eebcb8f582a7ad1f": true
+    }
+  },
+  "signature": "vBB4whYS2qLgdChZjxERV4Bq4i6SDOydCP951vOBYfao74+2pcPSahewSV6315p7OQoowFl9KNYqBwm441WFDg=="
 }
