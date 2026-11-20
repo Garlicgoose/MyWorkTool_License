@@ -9,6 +9,12 @@ export const MODES = ['full', 'restricted', 'disabled', 'remove'];
 const digestPattern = /^[0-9a-f]{64}$/;
 const directivePattern = /^(?:(?:all|cairn|shipment):(?:[0-9a-f]{64}:)?|[0-9a-f]{64}:)(?:full|restricted|disabled|remove)$/;
 const rawKey = key => createPublicKey({key:Buffer.concat([Buffer.from('302a300506032b6570032100','hex'),Buffer.from(key,'base64')]),format:'der',type:'spki'});
+function machineId(value){
+ if(typeof value!=='string')throw new Error('设备摘要无效。');
+ const normalized=value.trim().toLowerCase();
+ if(normalized.length!==64||!digestPattern.test(normalized))throw new Error('设备摘要必须为 64 位十六进制。');
+ return normalized;
+}
 
 export function canonical(payload) {
  return JSON.stringify({global_enabled:payload.global_enabled,issued_at:payload.issued_at,
@@ -26,7 +32,7 @@ export function verifyDocument(document, publicKey=PUBLIC_KEY) {
  if(!exactKeys(p,['global_enabled','issued_at','machines','revision','schema'])||p.schema!==1||typeof p.global_enabled!=='boolean'
   ||!Number.isSafeInteger(p.revision)||p.revision<1||typeof p.issued_at!=='string'||!p.issued_at.trim()
   ||!p.machines||typeof p.machines!=='object'||Array.isArray(p.machines)
-  ||Object.entries(p.machines).some(([k,v])=>typeof v!=='boolean'||(!digestPattern.test(k)&&!directivePattern.test(k))))throw new Error('控制内容无效。');
+  ||Object.entries(p.machines).some(([k,v])=>typeof v!=='boolean'||k!==k.trim()||(!digestPattern.test(k)&&!directivePattern.test(k))))throw new Error('控制内容无效。');
  if(typeof document.signature!=='string'||!verify(null,Buffer.from(canonical(p)),rawKey(publicKey),Buffer.from(document.signature,'base64')))throw new Error('签名无效，请使用原始有效文件。');
  return document;
 }
@@ -57,7 +63,7 @@ function changed(document, privateKey, publicKey, mutate) {
 
 export function setMode(document, mode, machine, privateKey, publicKey=PUBLIC_KEY, app='cairn') {
  if(!MODES.includes(mode)||!['all','cairn','shipment'].includes(app))throw new Error('程序或状态无效。');
- if(machine&&!digestPattern.test(machine))throw new Error('设备摘要必须为 64 位小写十六进制。');
+ if(machine!==undefined)machine=machineId(machine);
  return changed(document,privateKey,publicKey,p=>{
   if(machine&&!(machine in p.machines))p.machines[machine]=true;
   if(machine&&['full','restricted'].includes(mode)&&p.machines[machine]===false){
@@ -72,12 +78,13 @@ export function setMode(document, mode, machine, privateKey, publicKey=PUBLIC_KE
 }
 
 export function setMachine(document,machine,enabled,privateKey,publicKey=PUBLIC_KEY) {
- if(!digestPattern.test(machine)||typeof enabled!=='boolean')throw new Error('设备摘要或开关无效。');
+ machine=machineId(machine);
+ if(typeof enabled!=='boolean')throw new Error('设备开关无效。');
  return changed(document,privateKey,publicKey,p=>{p.machines[machine]=enabled});
 }
 
 export function deleteMachine(document,machine,privateKey,publicKey=PUBLIC_KEY) {
- if(!digestPattern.test(machine))throw new Error('设备摘要无效。');
+ machine=machineId(machine);
  return changed(document,privateKey,publicKey,p=>{for(const key of Object.keys(p.machines))if(key.split(':').includes(machine))delete p.machines[key]});
 }
 
