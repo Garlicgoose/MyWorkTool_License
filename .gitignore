@@ -1,0 +1,6 @@
+*.key
+*.private.pem
+*.private.der
+*.tmp
+*.bak
+node_modules/

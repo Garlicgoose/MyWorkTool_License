@@ -1,0 +1,78 @@
+name: Desktop controls
+on:
+  push:
+    paths: [control-deployment.json]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: '设置状态 / 公共机器开关 / 删除公共机器记录'
+        required: true
+        type: choice
+        options: [set-mode, set-machine, delete-machine]
+      app:
+        description: 'all 同时控制两个程序；也可单独选择'
+        required: true
+        type: choice
+        options: [all, cairn, shipment]
+      mode:
+        description: 'full / restricted / disabled / remove'
+        type: choice
+        options: [full, restricted, disabled, remove]
+      machine_digest:
+        description: '留空设置全局；填写机器摘要设置单机。删除时必填'
+        type: string
+      enabled:
+        description: 'set-machine 使用：true 开启，false 关闭'
+        type: choice
+        options: ['true', 'false']
+permissions:
+  contents: write
+concurrency:
+  group: shared-device-policy
+  cancel-in-progress: false
+jobs:
+  control:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Prepare control change
+        env:
+          SIGNING_KEY: ${{ secrets.CAIRN_POLICY_PRIVATE_KEY_B64 }}
+          CONTROL_ACTION: ${{ inputs.action }}
+          CONTROL_APP: ${{ inputs.app }}
+          CONTROL_MODE: ${{ inputs.mode }}
+          CONTROL_MACHINE: ${{ inputs.machine_digest }}
+          CONTROL_ENABLED: ${{ inputs.enabled }}
+          CONTROL_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+          CONTROL_EVENT: ${{ github.event_name }}
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {applyRequest} from './scripts/desktop-control-request.mjs';
+          import {loadSigningKey,verifyDocument} from './scripts/cairn-policy.mjs';
+          const request=process.env.CONTROL_EVENT==='push'?JSON.parse(readFileSync('control-deployment.json','utf8')):{id:process.env.CONTROL_ID,action:process.env.CONTROL_ACTION,app:process.env.CONTROL_APP,
+            mode:process.env.CONTROL_MODE,machine_digest:process.env.CONTROL_MACHINE,
+            enabled:process.env.CONTROL_ENABLED==='true',created_at:new Date().toISOString()};
+          if(process.env.SIGNING_KEY){
+            const previous=JSON.parse(readFileSync('ShipmentTrack_license.json','utf8'));
+            const key=loadSigningKey(Buffer.from(process.env.SIGNING_KEY,'base64'));
+            const next=applyRequest(previous,request,key);verifyDocument(next);
+            writeFileSync('ShipmentTrack_license.json',JSON.stringify(next,null,2)+'\n');
+            writeFileSync('control-result.json',JSON.stringify({id:request.id,status:'completed',revision:next.payload.revision,finished_at:new Date().toISOString()},null,2)+'\n');
+          }else{throw new Error('Configure repository secret CAIRN_POLICY_PRIVATE_KEY_B64.');}
+          NODE
+      - name: Commit control change
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- ShipmentTrack_license.json
+          for path in control-request.json control-result.json; do
+            if test -f "$path"; then git add -- "$path"; fi
+          done
+          git diff --cached --quiet && exit 0
+          git commit -m 'Update desktop control request'
+          git push origin HEAD:main
