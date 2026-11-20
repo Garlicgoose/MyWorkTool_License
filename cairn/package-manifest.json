@@ -1,0 +1,24 @@
+{
+  "version": "1.0.8",
+  "display_version": "1.08",
+  "filename": "Cairn_1.0.8_x64-setup.exe",
+  "tag": "cairn-v1.08",
+  "size": 143723776,
+  "sha256": "ddfe764eccec2e99bd3dd77964789d0f946dc766e1efa177da679da62b3583d6",
+  "parts": [
+    {
+      "file": "artifacts/1.0.8/installer-001.part",
+      "size": 78643200,
+      "sha256": "fe440cb6cbe3ba74067f643d85aa012b5b83ef697ddb6903640e3448cc2be9ff"
+    },
+    {
+      "file": "artifacts/1.0.8/installer-002.part",
+      "size": 65080576,
+      "sha256": "569582806f51b72a173d66340d75db3a477da60f148caacff3124accb6e67a7f"
+    }
+  ],
+  "notes": [
+    "优化工作区与 PDF 文件操作。",
+    "完善文件输出和记录查看。"
+  ]
+}

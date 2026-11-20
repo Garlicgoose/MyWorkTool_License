@@ -37,6 +37,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+          sparse-checkout: |
+            /scripts/
+            /ShipmentTrack_license.json
+            /control-deployment.json
+            /control-result.json
+          sparse-checkout-cone-mode: false
       - name: Prepare control change
         env:
           SIGNING_KEY: ${{ secrets.CAIRN_POLICY_PRIVATE_KEY_B64 }}
