@@ -60,6 +60,11 @@ export function setMode(document, mode, machine, privateKey, publicKey=PUBLIC_KE
  if(machine&&!digestPattern.test(machine))throw new Error('设备摘要必须为 64 位小写十六进制。');
  return changed(document,privateKey,publicKey,p=>{
   if(machine&&!(machine in p.machines))p.machines[machine]=true;
+  if(machine&&['full','restricted'].includes(mode)&&p.machines[machine]===false){
+   // Reopen the selected app while keeping the other app explicitly closed.
+   if(app!=='all')p.machines[`${machine}:disabled`]=true;
+   p.machines[machine]=true;
+  }
   const prefix=machine?(app==='all'?`${machine}:`:`${app}:${machine}:`):`${app}:`;
   for(const value of MODES)delete p.machines[prefix+value];
   p.machines[prefix+mode]=true;
