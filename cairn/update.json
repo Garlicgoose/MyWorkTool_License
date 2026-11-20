@@ -1,7 +1,7 @@
 {
   "version": "1.0.8",
   "installer_url": "https://github.com/Garlicgoose/MyWorkTool_License/releases/download/cairn-v1.08/Cairn_1.0.8_x64-setup.exe",
-  "sha256": "ddfe764eccec2e99bd3dd77964789d0f946dc766e1efa177da679da62b3583d6",
+  "sha256": "97fe7bda9d963aadf1a47a4e8c552f79a79e664caa7a967b1e925768ef4e70f6",
   "notes": [
     "优化工作区与 PDF 文件操作。",
     "完善文件输出和记录查看。"
