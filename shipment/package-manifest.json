@@ -1,0 +1,16 @@
+{
+  "version": "1.4.0",
+  "tag": "shipment-final-v1.4.0",
+  "assets": [
+    {
+      "file": "ShipmentTrack-Final-windows-x64.zip",
+      "size": 74592934,
+      "sha256": "acc4496eec17d510ee0fb1c69f31928f84dbc8c08f57671da2c8183c448f7f98"
+    },
+    {
+      "file": "ShipmentTrack-Final.exe",
+      "size": 6796871,
+      "sha256": "14df50943c8e28f29dd22f7c33cd82d21b392cc5820d1da9520869d2b76dc3e4"
+    }
+  ]
+}

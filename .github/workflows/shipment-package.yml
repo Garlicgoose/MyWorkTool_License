@@ -1,0 +1,46 @@
+name: Publish ShipmentTrack final
+on:
+  workflow_dispatch:
+  push:
+    paths: [shipment/package-manifest.json]
+permissions:
+  contents: write
+concurrency:
+  group: shipment-final-publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /shipment/
+          sparse-checkout-cone-mode: false
+      - name: Verify complete package
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,re
+          from pathlib import Path
+          root=Path('shipment').resolve()
+          document=json.loads((root/'package-manifest.json').read_text())
+          assert document['version']=='1.4.0' and document['tag']=='shipment-final-v1.4.0'
+          for asset in document['assets']:
+              path=(root/asset['file']).resolve()
+              assert path.is_relative_to(root) and path.suffix in ('.zip','.exe')
+              assert path.stat().st_size==asset['size']
+              assert hashlib.sha256(path.read_bytes()).hexdigest()==asset['sha256']
+          PY
+      - name: Publish final package
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          printf '%s\n' 'ShipmentTrack 最终版。首次使用请下载完整 ZIP，解压后运行 Shipment Track.exe。单独 EXE 仅用于已有完整运行目录。' > /tmp/shipment-final-notes.txt
+          if gh release view shipment-final-v1.4.0 >/dev/null 2>&1; then
+            gh release upload shipment-final-v1.4.0 shipment/ShipmentTrack-Final-windows-x64.zip shipment/ShipmentTrack-Final.exe --clobber
+          else
+            gh release create shipment-final-v1.4.0 shipment/ShipmentTrack-Final-windows-x64.zip shipment/ShipmentTrack-Final.exe --title 'ShipmentTrack 最终版' --notes-file /tmp/shipment-final-notes.txt
+          fi
