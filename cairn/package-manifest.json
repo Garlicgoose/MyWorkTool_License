@@ -1,24 +1,26 @@
 {
-  "version": "1.0.8",
-  "display_version": "1.08",
-  "filename": "Cairn_1.0.8_x64-setup.exe",
-  "tag": "cairn-v1.08",
-  "size": 143727303,
-  "sha256": "97fe7bda9d963aadf1a47a4e8c552f79a79e664caa7a967b1e925768ef4e70f6",
+  "version": "1.0.9",
+  "display_version": "1.09",
+  "filename": "Cairn_1.0.9_x64-setup.exe",
+  "tag": "cairn-v1.09",
+  "size": 143723277,
+  "sha256": "363908031f316ac1e8c83eb96e9d27850eccdd8c544eefa72f3754f365801347",
   "parts": [
     {
-      "file": "artifacts/1.0.8/ui-verified/installer-001.part",
+      "file": "artifacts/1.0.9/verified/installer-001.part",
       "size": 78643200,
-      "sha256": "99d419ddbc905f7d364e31c4ea724f7d9a9e80deeaf06150d41b0e96077916d6"
+      "sha256": "248e135a601db6a867f37278d104e091e73c4a80ba1440b841f865c8b55532ed"
     },
     {
-      "file": "artifacts/1.0.8/ui-verified/installer-002.part",
-      "size": 65084103,
-      "sha256": "ca22cc5bbea4d228914b19d592df5ffdabd55d81b800bcb140e5c4432bc16110"
+      "file": "artifacts/1.0.9/verified/installer-002.part",
+      "size": 65080077,
+      "sha256": "572237bfe5f47b00fd2a2edd825ffbf5386499f6fed87159a14a6968ac9b9330"
     }
   ],
   "notes": [
-    "优化工作区与 PDF 文件操作。",
-    "完善文件输出和记录查看。"
+    "修复付款申请文件名带空格时的月份识别。",
+    "归档设置统一放入程序设置，供应商支持搜索及单独编辑。",
+    "补齐 HK EI、HK FedEx 审核合并的原票和输出目录。",
+    "明确工具箱目录的用途，移除审核页重复的设置面板。"
   ]
 }
