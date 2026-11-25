@@ -1,28 +1,30 @@
 {
-  "version": "1.0.12-beta.1",
+  "version": "1.0.12-beta.2",
   "display_version": "1.12 beta",
-  "filename": "Cairn_1.0.12-beta.1_x64-setup.exe",
-  "tag": "cairn-v1.12-beta.1",
+  "filename": "Cairn_1.0.12-beta.2_x64-setup.exe",
+  "tag": "cairn-v1.12-beta.2",
   "channel": "beta",
   "prerelease": true,
-  "size": 143897858,
-  "sha256": "f4b949138ad0bb1dd8ed8277841e8648c75df9b99fa2adba18231f137c2dde18",
+  "size": 143896133,
+  "sha256": "75fdcd4f84b7d9d0d61ccdeef7d49642ceec88122f6f43cd01a4dd36942ff575",
   "parts": [
     {
-      "file": "artifacts/1.0.12-beta.1/verified/installer-001.part",
+      "file": "artifacts/1.0.12-beta.2/verified/installer-001.part",
       "size": 78643200,
-      "sha256": "8a02e27d552203873ead89fcfe09fbe1c8e9f0fde0e5ddfbd1e1d893a6f25d20"
+      "sha256": "c9c66f9782d350dd22cbf9b46c280e343b188e84266a543489e83ac34262c339"
     },
     {
-      "file": "artifacts/1.0.12-beta.1/verified/installer-002.part",
-      "size": 65254658,
-      "sha256": "e7518f14b90257aecf5cc571f57037e67fb9f230b46dfbd8582d16301e1f5891"
+      "file": "artifacts/1.0.12-beta.2/verified/installer-002.part",
+      "size": 65252933,
+      "sha256": "0cab7d11b1b9de4d7b60e728cffc6754a5e73a81c1acf0681f025955d5094821"
     }
   ],
   "notes": [
     "测试版本，建议先在公司测试目录完成多机验证。",
     "新增数据共用开关、共享空间及分享码。",
     "付款数据库和业务流程支持多人查看与编辑。",
+    "修复重复导入本机业务历史时的步骤记录冲突，重复历史记录不会再次新增。",
+    "历史步骤内容与共享记录不一致时，提示核对并保留双方记录。",
     "业务编辑显示占用状态，保存时检查记录版本。",
     "重复付款登记、网络中断及待处理记录提供明确提示。",
     "共享业务暂不展示邮件或本机附件绑定。",
