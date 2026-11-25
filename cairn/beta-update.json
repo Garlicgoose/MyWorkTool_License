@@ -1,11 +1,13 @@
 {
-  "version": "1.0.12-beta.1",
-  "installer_url": "https://github.com/Garlicgoose/MyWorkTool_License/releases/download/cairn-v1.12-beta.1/Cairn_1.0.12-beta.1_x64-setup.exe",
-  "sha256": "f4b949138ad0bb1dd8ed8277841e8648c75df9b99fa2adba18231f137c2dde18",
+  "version": "1.0.12-beta.2",
+  "installer_url": "https://github.com/Garlicgoose/MyWorkTool_License/releases/download/cairn-v1.12-beta.2/Cairn_1.0.12-beta.2_x64-setup.exe",
+  "sha256": "75fdcd4f84b7d9d0d61ccdeef7d49642ceec88122f6f43cd01a4dd36942ff575",
   "notes": [
     "测试版本，建议先在公司测试目录完成多机验证。",
     "新增数据共用开关、共享空间及分享码。",
     "付款数据库和业务流程支持多人查看与编辑。",
+    "修复重复导入本机业务历史时的步骤记录冲突，重复历史记录不会再次新增。",
+    "历史步骤内容与共享记录不一致时，提示核对并保留双方记录。",
     "业务编辑显示占用状态，保存时检查记录版本。",
     "重复付款登记、网络中断及待处理记录提供明确提示。",
     "共享业务暂不展示邮件或本机附件绑定。",
