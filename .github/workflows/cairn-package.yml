@@ -20,10 +20,15 @@ jobs:
           import hashlib,json,os,re
           from pathlib import Path
           document=json.loads(Path('cairn/package-manifest.json').read_text(encoding='utf-8'))
-          assert re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+',document['version'])
-          assert re.fullmatch(r'[0-9]+\.[0-9]+',document['display_version'])
-          assert re.fullmatch(r'cairn-v[0-9.]+',document['tag'])
-          assert document['tag']=='cairn-v'+document['display_version']
+          version=re.fullmatch(r'([0-9]+\.[0-9]+\.[0-9]+)(?:-(beta\.[1-9][0-9]*))?',document['version'])
+          assert version
+          beta=version[2] is not None
+          channel='beta' if beta else 'stable'
+          assert document.get('channel','stable')==channel
+          assert document.get('prerelease',False) is beta
+          assert re.fullmatch(r'[0-9]+\.[0-9]+(?: beta)?',document['display_version'])
+          assert document['display_version'].endswith(' beta') is beta
+          assert document['tag']=='cairn-v'+document['display_version'].removesuffix(' beta')+('-'+version[2] if beta else '')
           assert document['filename']=='Cairn_'+document['version']+'_x64-setup.exe'
           assert Path(document['filename']).name==document['filename']
           assert document['filename'].endswith('.exe')
@@ -41,6 +46,8 @@ jobs:
           with open(os.environ['GITHUB_ENV'],'a',encoding='utf-8') as environment:
               environment.write('PACKAGE_FILE='+str(output)+'\nRELEASE_TAG='+document['tag']+'\n')
               environment.write('RELEASE_TITLE=Cairn '+document['display_version']+'\n')
+              environment.write('PRERELEASE='+str(beta).lower()+'\n')
+              environment.write('UPDATE_MANIFEST=cairn/'+('beta-update.json' if beta else 'update.json')+'\n')
           Path('cairn/release-notes.txt').write_text('\n'.join(document['notes'])+'\n',encoding='utf-8')
           print('Verified complete installer:',document['sha256'])
           PY
@@ -52,8 +59,13 @@ jobs:
         run: |
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" "$PACKAGE_FILE" --clobber
+            if [ "$PRERELEASE" = true ]; then gh release edit "$RELEASE_TAG" --prerelease --latest=false; fi
           else
-            gh release create "$RELEASE_TAG" "$PACKAGE_FILE" --title "$RELEASE_TITLE" --notes-file cairn/release-notes.txt
+            if [ "$PRERELEASE" = true ]; then
+              gh release create "$RELEASE_TAG" "$PACKAGE_FILE" --title "$RELEASE_TITLE" --notes-file cairn/release-notes.txt --prerelease --latest=false
+            else
+              gh release create "$RELEASE_TAG" "$PACKAGE_FILE" --title "$RELEASE_TITLE" --notes-file cairn/release-notes.txt
+            fi
           fi
       - name: Publish update manifest
         env:
@@ -65,11 +77,13 @@ jobs:
           from pathlib import Path
           document=json.loads(Path('cairn/package-manifest.json').read_text(encoding='utf-8'))
           manifest={'version':document['version'],'installer_url':'https://github.com/'+os.environ['PUBLISH_REPOSITORY']+'/releases/download/'+document['tag']+'/'+document['filename'],'sha256':document['sha256'],'notes':document['notes']}
-          Path('cairn/update.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          target=Path(os.environ['UPDATE_MANIFEST'])
+          assert target.as_posix() in {'cairn/update.json','cairn/beta-update.json'}
+          target.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- cairn/update.json
+          git add -- "$UPDATE_MANIFEST"
           git diff --cached --quiet && exit 0
           git commit -m "Publish $RELEASE_TITLE update manifest"
           git pull --rebase origin main

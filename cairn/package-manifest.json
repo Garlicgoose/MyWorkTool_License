@@ -1,26 +1,34 @@
 {
-  "version": "1.0.9",
-  "display_version": "1.09",
-  "filename": "Cairn_1.0.9_x64-setup.exe",
-  "tag": "cairn-v1.09",
-  "size": 143723277,
-  "sha256": "363908031f316ac1e8c83eb96e9d27850eccdd8c544eefa72f3754f365801347",
+  "version": "1.0.12-beta.1",
+  "display_version": "1.12 beta",
+  "filename": "Cairn_1.0.12-beta.1_x64-setup.exe",
+  "tag": "cairn-v1.12-beta.1",
+  "channel": "beta",
+  "prerelease": true,
+  "size": 143897858,
+  "sha256": "f4b949138ad0bb1dd8ed8277841e8648c75df9b99fa2adba18231f137c2dde18",
   "parts": [
     {
-      "file": "artifacts/1.0.9/verified/installer-001.part",
+      "file": "artifacts/1.0.12-beta.1/verified/installer-001.part",
       "size": 78643200,
-      "sha256": "248e135a601db6a867f37278d104e091e73c4a80ba1440b841f865c8b55532ed"
+      "sha256": "8a02e27d552203873ead89fcfe09fbe1c8e9f0fde0e5ddfbd1e1d893a6f25d20"
     },
     {
-      "file": "artifacts/1.0.9/verified/installer-002.part",
-      "size": 65080077,
-      "sha256": "572237bfe5f47b00fd2a2edd825ffbf5386499f6fed87159a14a6968ac9b9330"
+      "file": "artifacts/1.0.12-beta.1/verified/installer-002.part",
+      "size": 65254658,
+      "sha256": "e7518f14b90257aecf5cc571f57037e67fb9f230b46dfbd8582d16301e1f5891"
     }
   ],
   "notes": [
-    "修复付款申请文件名带空格时的月份识别。",
-    "归档设置统一放入程序设置，供应商支持搜索及单独编辑。",
-    "补齐 HK EI、HK FedEx 审核合并的原票和输出目录。",
-    "明确工具箱目录的用途，移除审核页重复的设置面板。"
+    "测试版本，建议先在公司测试目录完成多机验证。",
+    "新增数据共用开关、共享空间及分享码。",
+    "付款数据库和业务流程支持多人查看与编辑。",
+    "业务编辑显示占用状态，保存时检查记录版本。",
+    "重复付款登记、网络中断及待处理记录提供明确提示。",
+    "共享业务暂不展示邮件或本机附件绑定。",
+    "提高审核合并步骤条在各配色下的可读性。",
+    "移除工具箱的 Bondex 报价更新。",
+    "PDF 编辑器新增电子章展示副本处理，减少资源重复复制并检查输出外观。",
+    "电子章模式保留可见外观；数字签名验签请使用未改动的原件。"
   ]
 }

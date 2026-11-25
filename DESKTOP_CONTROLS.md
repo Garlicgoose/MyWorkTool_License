@@ -27,6 +27,7 @@
 两个程序均在本仓库 Releases 提供已校验的发布包：
 
 - [Cairn 1.09 安装包](https://github.com/Garlicgoose/MyWorkTool_License/releases/tag/cairn-v1.09)
+- [Cairn 1.12 beta 安装包（预发布）](https://github.com/Garlicgoose/MyWorkTool_License/releases/tag/cairn-v1.12-beta.1)
 - [ShipmentTrack 最终版完整 ZIP](https://github.com/Garlicgoose/MyWorkTool_License/releases/tag/shipment-final-v1.4.0)
 
-Cairn 更新清单位于 cairn/update.json。首次安装 ShipmentTrack 请使用完整 ZIP。程序新源码暂未公开，公开仓库只提供发布包和管理工具。此文档不进入程序业务界面或安装包更新内容。
+Cairn 正式版更新清单位于 cairn/update.json，beta 更新清单位于 cairn/beta-update.json。正式版不会自动切换到 beta。首次安装 ShipmentTrack 请使用完整 ZIP。程序新源码暂未公开，公开仓库只提供发布包和管理工具。此文档不进入程序业务界面或安装包更新内容。
